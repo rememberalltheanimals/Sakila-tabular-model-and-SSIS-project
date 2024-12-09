@@ -1,0 +1,515 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1500,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/localhost;Sakila_DW",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "localhost",
+            "database": "Sakila_DW"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "credential": {
+          "AuthenticationKind": "Windows",
+          "Username": "T-ETL8\\Administrator",
+          "EncryptConnection": false
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "Rentals",
+        "columns": [
+          {
+            "name": "RentalKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "RentalKey"
+          },
+          {
+            "name": "RentalID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "RentalID"
+          },
+          {
+            "name": "FilmKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "FilmKey"
+          },
+          {
+            "name": "CategoryKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CategoryKey"
+          },
+          {
+            "name": "LanguageKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "LanguageKey"
+          },
+          {
+            "name": "CustomerKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CustomerKey"
+          },
+          {
+            "name": "StoreKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "StoreKey"
+          },
+          {
+            "name": "RentalDateKey",
+            "dataType": "int64",
+            "sourceColumn": "RentalDateKey"
+          },
+          {
+            "name": "ReturnDateKey",
+            "dataType": "int64",
+            "sourceColumn": "ReturnDateKey"
+          },
+          {
+            "name": "RentalDuration",
+            "dataType": "int64",
+            "sourceColumn": "RentalDuration"
+          },
+          {
+            "name": "RentalCost",
+            "dataType": "double",
+            "sourceColumn": "RentalCost"
+          },
+          {
+            "name": "RentalCount",
+            "dataType": "int64",
+            "sourceColumn": "RentalCount"
+          },
+          {
+            "type": "calculated",
+            "name": "PayAmount",
+            "dataType": "double",
+            "isDataTypeInferred": true,
+            "expression": "[RentalCost]*[RentalCount]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;Sakila_DW\",",
+                "    dbo_FactRental = Source{[Schema=\"dbo\",Item=\"FactRental\"]}[Data]",
+                "in",
+                "    dbo_FactRental"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Categories",
+        "columns": [
+          {
+            "name": "CategoryKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CategoryKey"
+          },
+          {
+            "name": "CategoryID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CategoryID"
+          },
+          {
+            "name": "CategoryName",
+            "dataType": "string",
+            "sourceColumn": "CategoryName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;Sakila_DW\",",
+                "    dbo_DimCategory = Source{[Schema=\"dbo\",Item=\"DimCategory\"]}[Data]",
+                "in",
+                "    dbo_DimCategory"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Customers",
+        "columns": [
+          {
+            "name": "CustomerKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CustomerKey"
+          },
+          {
+            "name": "CustomerId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CustomerId"
+          },
+          {
+            "name": "CustomerEmail",
+            "dataType": "string",
+            "sourceColumn": "CustomerEmail"
+          },
+          {
+            "name": "CustomerCity",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerCity"
+          },
+          {
+            "name": "CustomerCountry",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerCountry"
+          },
+          {
+            "name": "CustomerStatus",
+            "dataType": "string",
+            "sourceColumn": "CustomerStatus"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;Sakila_DW\",",
+                "    dbo_DimCustomer = Source{[Schema=\"dbo\",Item=\"DimCustomer\"]}[Data]",
+                "in",
+                "    dbo_DimCustomer"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Date",
+        "columns": [
+          {
+            "name": "DateKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DateKey"
+          },
+          {
+            "name": "DateValue",
+            "dataType": "dateTime",
+            "sourceColumn": "DateValue"
+          },
+          {
+            "name": "DayOfMonth",
+            "dataType": "int64",
+            "sourceColumn": "DayOfMonth"
+          },
+          {
+            "name": "MonthNumber",
+            "dataType": "int64",
+            "sourceColumn": "MonthNumber"
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName"
+          },
+          {
+            "name": "YearValue",
+            "dataType": "int64",
+            "sourceColumn": "YearValue"
+          },
+          {
+            "name": "DayOfWeek",
+            "dataType": "string",
+            "sourceColumn": "DayOfWeek"
+          },
+          {
+            "name": "DayNumberOfWeek",
+            "dataType": "int64",
+            "sourceColumn": "DayNumberOfWeek"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;Sakila_DW\",",
+                "    dbo_DimDate = Source{[Schema=\"dbo\",Item=\"DimDate\"]}[Data]",
+                "in",
+                "    dbo_DimDate"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Films",
+        "columns": [
+          {
+            "name": "FilmKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "FilmKey"
+          },
+          {
+            "name": "FilmID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "FilmID"
+          },
+          {
+            "name": "FilmTitle",
+            "dataType": "string",
+            "sourceColumn": "FilmTitle"
+          },
+          {
+            "name": "FilmReleaseYear",
+            "dataType": "double",
+            "sourceColumn": "FilmReleaseYear"
+          },
+          {
+            "name": "FilmRating",
+            "dataType": "string",
+            "sourceColumn": "FilmRating"
+          },
+          {
+            "name": "FilmLength",
+            "dataType": "int64",
+            "sourceColumn": "FilmLength"
+          },
+          {
+            "name": "SpecialFeatures",
+            "dataType": "string",
+            "sourceColumn": "SpecialFeatures"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;Sakila_DW\",",
+                "    dbo_DimFilm = Source{[Schema=\"dbo\",Item=\"DimFilm\"]}[Data]",
+                "in",
+                "    dbo_DimFilm"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Languages",
+        "columns": [
+          {
+            "name": "LanguageKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "LanguageKey"
+          },
+          {
+            "name": "LanguageID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "LanguageID"
+          },
+          {
+            "name": "Language",
+            "dataType": "string",
+            "sourceColumn": "Language"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;Sakila_DW\",",
+                "    dbo_DimLanguage = Source{[Schema=\"dbo\",Item=\"DimLanguage\"]}[Data]",
+                "in",
+                "    dbo_DimLanguage"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Stores",
+        "columns": [
+          {
+            "name": "StoreKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "StoreKey"
+          },
+          {
+            "name": "StoreId",
+            "dataType": "int64",
+            "sourceColumn": "StoreId"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost;Sakila_DW\",",
+                "    dbo_DimStore = Source{[Schema=\"dbo\",Item=\"DimStore\"]}[Data]",
+                "in",
+                "    dbo_DimStore"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Rentals Measures",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "col1",
+            "dataType": "boolean",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[col1]",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "DATATABLE(\"col1\", BOOLEAN, {{0}})"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total Payments",
+            "expression": "SUM(Rentals[PayAmount])"
+          },
+          {
+            "name": "Average Payments",
+            "expression": "AVERAGE(Rentals[PayAmount])"
+          },
+          {
+            "name": "Total Rental Count",
+            "expression": "COUNT(Rentals[RentalCount])"
+          },
+          {
+            "name": "AverageNumOfItemsOnRental",
+            "expression": "SUM(Rentals[RentalCount])/COUNT(Rentals[RentalID])"
+          },
+          {
+            "name": "AveRentalDuration",
+            "expression": "AVERAGE(Rentals[RentalDuration])"
+          },
+          {
+            "name": "AverageRentalCost",
+            "expression": "AVERAGE(Rentals[RentalCost])"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "52ad0b65-44ee-4626-a84e-2982d9532724",
+        "fromTable": "Rentals",
+        "fromColumn": "ReturnDateKey",
+        "toTable": "Date",
+        "toColumn": "DateKey",
+        "isActive": false
+      },
+      {
+        "name": "1fe71aba-dd5e-437a-99d1-84ec8fa0da27",
+        "fromTable": "Rentals",
+        "fromColumn": "CategoryKey",
+        "toTable": "Categories",
+        "toColumn": "CategoryKey"
+      },
+      {
+        "name": "37d46eb2-257a-4932-bb30-34202600849d",
+        "fromTable": "Rentals",
+        "fromColumn": "CustomerKey",
+        "toTable": "Customers",
+        "toColumn": "CustomerKey"
+      },
+      {
+        "name": "be0aa5ff-54be-4b0b-9b76-9487c78b535f",
+        "fromTable": "Rentals",
+        "fromColumn": "RentalDateKey",
+        "toTable": "Date",
+        "toColumn": "DateKey"
+      },
+      {
+        "name": "a7965c25-db43-48c7-a943-2548c79933ea",
+        "fromTable": "Rentals",
+        "fromColumn": "FilmKey",
+        "toTable": "Films",
+        "toColumn": "FilmKey"
+      },
+      {
+        "name": "2bba50df-d636-4089-a857-0939b5c828b1",
+        "fromTable": "Rentals",
+        "fromColumn": "LanguageKey",
+        "toTable": "Languages",
+        "toColumn": "LanguageKey"
+      },
+      {
+        "name": "1170cbbf-5baf-42ec-a09e-c5a39a63079a",
+        "fromTable": "Rentals",
+        "fromColumn": "StoreKey",
+        "toTable": "Stores",
+        "toColumn": "StoreKey"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "600"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
